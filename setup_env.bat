@@ -60,13 +60,6 @@ if errorlevel 1 (
     exit /b 1
 )
 
-echo ======================================================
-echo  Step 6: Verify TIMESAT installation
-echo ======================================================
-python - <<PYCODE
-import timesat, timesat._timesat as _
-print(f"✅ TIMESAT {timesat.__version__} OK")
-PYCODE
 
 echo ======================================================
 echo  ✅ Environment setup complete
