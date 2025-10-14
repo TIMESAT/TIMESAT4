@@ -89,7 +89,16 @@
             
             
             <div class="sidebar-logo">
-                <img src="{{ url_for('static', filename=logos.sidebar) }}" alt="Sidebar Logo" class="logo-image">
+                <a href="https://github.com/TIMESAT"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Open TIMESAT GitHub in a new tab"
+                    title="TIMESAT on GitHub">
+                <img
+                    src="{{ url_for('static', filename=logos.sidebar) }}"
+                    alt="TIMESAT – Sidebar Logo"
+                    class="logo-image">
+                </a>
             </div>
             <input type="file" id="load-json" style="display:none" accept=".json" onchange="loadFromFile()">
             <button id="save-options-button" onclick="saveToFile()" class="disabled-button" disabled>Save Options</button>
@@ -396,7 +405,12 @@
                             <div class="parameters-group">
                                 <div>
                                     <label for="debug_mod">Debug:</label>
-                                    <input type="checkbox" id="debug_mod" name="debug_mod" style="width: auto;" required onchange="updateParam('debug_mod')">
+                                    <select id="debug_mod" name="debug_mod" style="width: auto;" required onchange="updateParam('debug_mod')">
+                                        <option value="0" selected>Off</option>
+                                        <option value="1">Show all details</option>
+                                        <option value="2">Only show pixel row and column</option>
+                                        <option value="3">Only show row</option>
+                                    </select>
                                 </div>
                             </div>
                     </div>

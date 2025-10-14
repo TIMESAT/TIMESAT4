@@ -47,7 +47,7 @@ default_params = {
     "season-start": 0.5,
     "season-end": 0.5, 
     "base-level": 0.05, 
-    "p_fillbase": 0, 
+    "p_fillbase": 1, 
     "p_hrvppformat": 1,
     "seasonal-method": 1, 
     "seasonal-par": 0.5,
@@ -114,7 +114,6 @@ def update_plot():
 
     # Retrieve the data sent from the frontend
     data = request.get_json()
-    print(data)
 
     # Update session parameters based on user input
     # Check and update the session for the specific parameter sent
@@ -135,7 +134,8 @@ def update_plot():
     p_ylu = [session.get('data-range-min'), session.get('data-range-max')]
     p_a = [session.get('a1'),session.get('a2'),session.get('a3'),session.get('a4'),session.get('a5'),session.get('a6'),session.get('a7'),session.get('a8'),session.get('a9')]
 
-    p_printflag = session.get('debug_mod')
+    p_printflag = int(session.get('debug_mod'))
+
     p_hrvppformat = session.get('p_hrvppformat')
     p_nodata = session.get('nodata-out')
     p_outlier = session.get('outliers')
@@ -152,7 +152,7 @@ def update_plot():
                                 session.get('season-end', 0.5)], 
                                dtype='float64', order='F')
     p_low_percentile = np.full(255, session.get('base-level', 0.05), dtype='float64')
-    p_fillbase       = np.full(255, session.get('p_fillbase', 0), dtype='uint8')
+    p_fillbase       = np.full(255, session.get('p_fillbase', 1), dtype='uint8')
     p_seasonmethod   = np.full(255, session.get('seasonal-method', 1), dtype='uint8')
     p_seapar         = np.full(255, session.get('seasonal-par', 0.5), dtype='float64')
 
@@ -191,7 +191,6 @@ def update_plot():
 
     raw_y, raw_w, raw_lc, raw_yyyymmdd, raw_yyyydoy = ts_functions.raw_single_extraction(
         current_row - row_start, current_col - col_start)
-    print(raw_y.shape)
 
     # Convert yyyymmdd to datetime objects using pandas (this is the most efficient way)
     x_dates = pd.to_datetime(raw_yyyymmdd.astype(str), format='%Y%m%d')
@@ -440,7 +439,7 @@ def update_rowcol():
         session['current_col'] = current_col + 1  # Move col right
     else:
         # If we reach the boundary, set the message
-        message = "You've reached the edge of the subwindow, please select a new location in the Input tab."
+        message = "You've reached the edge of the subwindow. You can select a new location in the Input tab."
 
     # Return only the message if it's set
     return jsonify({

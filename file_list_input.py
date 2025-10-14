@@ -46,8 +46,8 @@ def upload_input_file():
         # Case: One integer (image file names)
         if len(first_line) == 1 and first_line[0].isdigit():
             input_type = 'imagelist'
-            session['current_col'] = None
             session['current_row'] = None
+            session['current_col'] = None
             npt = int(first_line[0])
             image_file_names = [line.strip() for line in lines[1:npt + 1]]
             ts_functions.extract_dates_strlist(image_file_names)
@@ -84,14 +84,14 @@ def upload_input_file():
         session['ylim1'] = min_y
         session['ylim2'] = max_y
 
-        session['col'] = stack_data.shape[0]
-        session['row'] = stack_data.shape[1]
+        session['row'] = stack_data.shape[0]
+        session['col'] = stack_data.shape[1]
         session['current_col'] = 1
         session['current_row'] = 1
-        session['col_start'] = 1
-        session['col_end'] = stack_data.shape[0]
         session['row_start'] = 1
-        session['row_end'] = stack_data.shape[1]
+        session['row_end'] = stack_data.shape[0]
+        session['col_start'] = 1
+        session['col_end'] = stack_data.shape[1]
 
     # Handle table files
     elif file.filename.endswith('.csv') or file.filename.endswith('.xls') or file.filename.endswith('.xlsx'):
@@ -210,8 +210,8 @@ def generate_geotiff_image(geotiff_index):
 @file_list_input_bp.route('/calculate_row_col', methods=['POST'])
 def calculate_row_col():
     # Reset session row/col (optional)
-    session['current_col'] = None
     session['current_row'] = None
+    session['current_col'] = None
 
     data = request.get_json(silent=True) or {}
     input_type = data.get('input_type', 'imagelist')  # 'imagelist' | 'imagestack'

@@ -334,7 +334,6 @@ def read_images(image_file_names, qa_file_names, landcover_file_name, npt, row_o
 
 def raw_single_extraction(current_row, current_col):
     global ym3, wm3, lc3, tv_yyyymmdd, tv_yyyydoy
-    print(ym3.shape)
 
     raw_y = ym3[current_row:current_row+1, current_col:current_col+1, :]
     raw_w = wm3[current_row:current_row+1, current_col:current_col+1, :]
@@ -395,7 +394,6 @@ def ts_single_run(raw_y, raw_w, raw_lc, yrstart, nyear, z,
     #         p_hrvppformat=p_hrvppformat, p_seasonmethod=p_seasonmethod,
     #         p_seapar=p_seapar, nimg=z, p_outindex_num=p_outindex_num, row=1, col=1
     #     )
-
 
     vpp, vppqa, nseason, yfit, yfitqa, seasonfit, tseq = timesat.tsf2py(
         nyear, raw_y, raw_w, tv_yyyydoy, lc, p_nclasses, landuse, p_outindex,

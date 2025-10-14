@@ -25,40 +25,46 @@ lock = threading.Lock()
 def _form_json_(session_data_json):
     # define and form settings
     data_to_write = {
-        'inputs': {
-            'input_type': {
-                'value': session_data_json['input_type'],
-                'description': 'Input data type: image, csv.'
-            },
-            'image_list_file': {
-                'value': session_data_json['image_list_file'],
-                'description': 'A file containing number of images & a list of full path image files.'
-            },
-            'quality_list_file': {
-                'value': session_data_json['quality_list_file'],
-                'description': 'A file containing number of images & a list of full path quality files (image).'
-            },
-            'image_file_names': {
-                'value': session_data_json['image_file_names'],
-                'description': 'A list of full path image files.'
-            },
-            'qa_file_names': {
-                'value': session_data_json['qa_file_names'],
-                'description': 'A list of full path quality files (image).'
-            },
-            'table_data': {
-                'value': session_data_json['table_data'],
-                'description': 'data from table format inputs.'
-            },
-            'num_of_data': {
-                'value': session_data_json['num_of_data'],
-                'description': 'Number of time steps/images.'
-            },
-            'imwindow': {
-                'value': [0, 0, 0, 0],
-                'description': 'Range and weights for mask data conversion.'
-            }
-        },
+        # 'inputs': {
+        #     'input_type': {
+        #         'value': session_data_json['input_type'],
+        #         'description': 'Input data type: image, csv.'
+        #     },
+        #     'image_list_file': {
+        #         'value': session_data_json['image_list_file'],
+        #         'description': 'A file containing number of images & a list of full path image files.'
+        #     },
+        #     'quality_list_file': {
+        #         'value': session_data_json['quality_list_file'],
+        #         'description': 'A file containing number of images & a list of full path quality files (image).'
+        #     },
+        #     'image_file_names': {
+        #         'value': session_data_json['image_file_names'],
+        #         'description': 'A list of full path image files.'
+        #     },
+        #     'qa_file_names': {
+        #         'value': session_data_json['qa_file_names'],
+        #         'description': 'A list of full path quality files (image).'
+        #     },
+        #     'table_data': {
+        #         'value': session_data_json['table_data'],
+        #         'description': 'data from table format inputs.'
+        #     },
+        #     'num_of_data': {
+        #         'value': session_data_json['num_of_data'],
+        #         'description': 'Number of time steps/images.'
+        #     },
+        #     'imwindow': {
+        #         'value': [0, 0, 0, 0],
+        #         'description': 'Range and weights for mask data conversion.'
+        #     }
+        # },
+        # 'outputs':{
+        #     'output_folder': {
+        #         'value': session_data_json['output_folder'],
+        #         'description': 'A directory where output files will be saved.'
+        #     }
+        # },
         'settings': {
             'p_ignoreday': {
                 'value': session_data_json['p_ignoreday'],
@@ -136,12 +142,6 @@ def _form_json_(session_data_json):
                 'value': session_data_json['n_memory'],
                 'description': 'Number of memory.'
             }
-        },
-        'outputs':{
-            'output_folder': {
-                'value': session_data_json['output_folder'],
-                'description': 'A directory where output files will be saved.'
-            }
         }
     }
     return data_to_write
@@ -174,21 +174,21 @@ def choose_output_folder():
 def choose_folder_and_save():
     # Convert the Python dictionary to JSON
     session_data = dict(session)
-    if session_data['input_type'] == 'image':
-        session_data['image_file_names'] = ts_functions.load4memory_image_file_names()
-        session_data['qa_file_names'] = ts_functions.load4memory_qa_file_names()
-        session_data['table_data'] = ''
-    elif session_data['input_type'] == 'table':
-        session_data['time_data'] = ''
-        session_data['image_file_names'] = ''
-        session_data['qa_file_names'] = ''
-        table_data = ts_functions.load4memory_table_data()
-        # Ensure all datetime columns are converted to strings
-        for col in table_data.columns:
-            if pd.api.types.is_datetime64_any_dtype(table_data[col]):
-                table_data[col] = table_data[col].apply(lambda x: x.strftime('%Y-%m-%d') if pd.notnull(x) else None)
+    # if session_data['input_type'] == 'image':
+    #     session_data['image_file_names'] = ts_functions.load4memory_image_file_names()
+    #     session_data['qa_file_names'] = ts_functions.load4memory_qa_file_names()
+    #     session_data['table_data'] = ''
+    # elif session_data['input_type'] == 'table':
+    #     session_data['time_data'] = ''
+    #     session_data['image_file_names'] = ''
+    #     session_data['qa_file_names'] = ''
+    #     table_data = ts_functions.load4memory_table_data()
+    #     # Ensure all datetime columns are converted to strings
+    #     for col in table_data.columns:
+    #         if pd.api.types.is_datetime64_any_dtype(table_data[col]):
+    #             table_data[col] = table_data[col].apply(lambda x: x.strftime('%Y-%m-%d') if pd.notnull(x) else None)
 
-        session_data['table_data'] = table_data.to_dict(orient="records")
+    #     session_data['table_data'] = table_data.to_dict(orient="records")
 
     json_data = json.dumps(_form_json_(dict(session_data)), indent=4)
     
