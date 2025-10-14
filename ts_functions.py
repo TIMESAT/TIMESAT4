@@ -272,7 +272,7 @@ def read_table_data(df):
 
 
 
-def read_images(image_file_names, qa_file_names, landcover_file_name, npt, col_off, row_off, sub_width, sub_height):
+def read_images(image_file_names, qa_file_names, landcover_file_name, npt, row_off, col_off, sub_height, sub_width):
     global ym3, wm3, lc3, tv_yyyymmdd
     """
     Function to read GeoTIFF data using rasterio and process them into 3D arrays.
@@ -292,13 +292,12 @@ def read_images(image_file_names, qa_file_names, landcover_file_name, npt, col_o
         err (int): Error code (0 if no error).
     """
     err = 0
-    
     # Initialize 3D arrays
-    ym3 = np.zeros((sub_width, sub_height, npt), dtype=np.float32)
-    wm3 = np.ones((sub_width, sub_height, npt), dtype=np.float32)
-    lc3 = np.ones((sub_width, sub_height), dtype=np.float32)
+    ym3 = np.zeros((sub_height, sub_width, npt), dtype=np.float32)
+    wm3 = np.ones((sub_height, sub_width, npt), dtype=np.float32)
+    lc3 = np.ones((sub_height, sub_width), dtype=np.float32)
     # Define the window range
-    window = rasterio.windows.Window(col_off, row_off, sub_width, sub_height)
+    window = rasterio.windows.Window(row_off, col_off, sub_height, sub_width)
     
     # 假设 tv_yyyymmdd 是一个包含日期的数组
     min_t = str(tv_yyyymmdd.min())  # 获取最小值并转换为字符串
@@ -333,12 +332,13 @@ def read_images(image_file_names, qa_file_names, landcover_file_name, npt, col_o
     return min_y, max_y, min_t, max_t
 
 
-def raw_single_extraction(current_col, current_row):
+def raw_single_extraction(current_row, current_col):
     global ym3, wm3, lc3, tv_yyyymmdd, tv_yyyydoy
+    print(ym3.shape)
 
-    raw_y = ym3[current_col:current_col+1, current_row:current_row+1, :]
-    raw_w = wm3[current_col:current_col+1, current_row:current_row+1, :]
-    raw_lc = lc3[current_col:current_col+1, current_row:current_row+1]
+    raw_y = ym3[current_row:current_row+1, current_col:current_col+1, :]
+    raw_w = wm3[current_row:current_row+1, current_col:current_col+1, :]
+    raw_lc = lc3[current_row:current_row+1, current_col:current_col+1]
 
     return raw_y, raw_w, raw_lc, tv_yyyymmdd, tv_yyyydoy
 

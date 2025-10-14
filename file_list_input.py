@@ -267,7 +267,7 @@ def calculate_row_col():
                 session['current_row'] = row + 1
                 session['current_col'] = col + 1
 
-                return jsonify({'row': row, 'col': col})
+                return jsonify({'row': row + 1, 'col': col + 1})
 
         except Exception as e:
             return jsonify({'error': f'Error calculating row/col (imagelist): {str(e)}'}), 500
@@ -308,7 +308,7 @@ def calculate_row_col():
         session['current_row'] = row + 1
         session['current_col'] = col + 1
 
-        return jsonify({'row': row, 'col': col})
+        return jsonify({'row': row + 1, 'col': col + 1})
 
     else:
         return jsonify({'error': f'Unknown input_type: {input_type}. Upload a GeoTIFF or file list first.'}), 400
@@ -430,7 +430,7 @@ def load_input_Files():
             # Build ym3/wm3 from disk for the subwindow; returns plotting ranges
             min_y, max_y, min_t, max_t = ts_functions.read_images(
                 image_file_names, qa_file_names, landcover_file_name,
-                num_of_data, col_off, row_off, sub_width, sub_height
+                num_of_data, row_off, col_off, sub_height, sub_width
             )
 
             session['xlim1'] = min_t

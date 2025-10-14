@@ -190,7 +190,8 @@ def update_plot():
     # extract raw data from the current pixel
 
     raw_y, raw_w, raw_lc, raw_yyyymmdd, raw_yyyydoy = ts_functions.raw_single_extraction(
-        current_col - col_start, current_row - row_start)
+        current_row - row_start, current_col - col_start)
+    print(raw_y.shape)
 
     # Convert yyyymmdd to datetime objects using pandas (this is the most efficient way)
     x_dates = pd.to_datetime(raw_yyyymmdd.astype(str), format='%Y%m%d')
