@@ -98,4 +98,3 @@ TIMESAT_GUI/
 ## License
 
 This project is distributed under the GPL license.  
-Please update this section as needed.
