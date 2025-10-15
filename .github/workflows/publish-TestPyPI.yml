@@ -1,0 +1,30 @@
+name: Upload to TestPyPI
+
+on:
+  release:
+    types: [prereleased]
+
+permissions:
+  contents: read
+
+jobs:
+  testpypi-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    environment:
+      name: testpypi
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build package
+        run: |
+          python -m pip install --upgrade pip build
+          python -m build
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          packages-dir: dist/
