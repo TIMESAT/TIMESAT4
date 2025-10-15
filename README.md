@@ -42,7 +42,7 @@ python -m pip install -r requirements.txt
 TIMESAT 4.1.7.dev0 is hosted on TestPyPI, not the regular PyPI.  
 Install it using:
 ```bash
-python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple timesat==4.1.7.dev0
+python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple timesat
 ```
 
 ### Step 5 — Verify TIMESAT installation
@@ -51,9 +51,8 @@ Run the following test:
 python -c "import timesat, timesat._timesat as _; print('TIMESAT', timesat.__version__, 'OK')"
 ```
 Expected output:
-```
-TIMESAT 4.1.7.dev0 OK
-```
+>>TIMESAT 4.1.7.dev0 OK
+
 
 ---
 
