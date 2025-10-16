@@ -72,29 +72,6 @@ Open that link in your browser to access the GUI.
 
 ---
 
-## Project Structure
-
-```
-TIMESAT_GUI/
-│
-├── webTIMESAT.py
-├── ts_functions.py
-├── ts_full_run.py
-├── file_list_input.py
-├── tab_data_input.py
-├── tab_output.py
-├── tab_run.py
-├── tab_save_load.py
-├── tab_settings.py
-│
-├── requirements.txt
-│
-├── templates/             ← HTML templates
-└── static/                ← Static files (CSS, JS, figures)
-```
-
----
-
 ## License
 
 This project is distributed under the GPL license.  
