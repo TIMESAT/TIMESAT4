@@ -14,15 +14,20 @@ classifiers = [
   "Programming Language :: Python :: 3",
   "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
   "Framework :: Flask",
+  "Environment :: Web Environment",
+  "Operating System :: OS Independent",
 ]
 
-# Put only *runtime* deps here (subset of requirements.txt that the app truly needs).
-# Keep dev/test/docs pins in requirements/*.txt or optional groups.
+# --- Direct runtime dependencies only (what your app imports at run) ---
 dependencies = [
-  "flask>=2.3",         # adjust to what you actually use
-  # "numpy>=1.26",
-  # "pandas>=2.2",
-  # etc.
+  "flask>=2.3",
+  "psutil>=5.9",
+  "numpy>=1.26",
+  "pandas>=2.2",
+  "requests>=2.31",
+  "pillow>=10.0",
+  "pyyaml>=6.0.1",
+  "timesat>=4.1.7",
 ]
 
 [project.scripts]
