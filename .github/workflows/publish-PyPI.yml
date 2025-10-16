@@ -1,10 +1,4 @@
-# This workflow will upload a Python Package to PyPI when a release is created
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#publishing-to-package-registries
-
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
+# This workflow will upload a Python Package to PyPI or TestPyPI when a release is created
 
 name: Upload Python Package
 
@@ -28,8 +22,7 @@ jobs:
 
       - name: Build release distributions
         run: |
-          # NOTE: put your own distribution build steps here.
-          python -m pip install build
+          python -m pip install -U build
           python -m build
 
       - name: Upload distributions
@@ -40,21 +33,14 @@ jobs:
 
   pypi-publish:
     runs-on: ubuntu-latest
-    needs:
-      - release-build
+    needs: [release-build]
     permissions:
-      # IMPORTANT: this permission is mandatory for trusted publishing
+      # REQUIRED for PyPI Trusted Publishing
       id-token: write
 
-    # Dedicated environments with protections for publishing are strongly recommended.
-    # For more information, see: https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment#deployment-protection-rules
     environment:
       name: pypi
-      # OPTIONAL: uncomment and update to include your PyPI project URL in the deployment status:
-      # url: https://pypi.org/p/YOURPROJECT
-      #
-      # ALTERNATIVE: if your GitHub Release name is the PyPI project version string
-      # ALTERNATIVE: exactly, uncomment the following line instead:
+      # Optionally set a URL for deployment status:
       # url: https://pypi.org/project/YOURPROJECT/${{ github.event.release.name }}
 
     steps:
@@ -64,7 +50,28 @@ jobs:
           name: release-dists
           path: dist/
 
-      - name: Publish release distributions to PyPI
+      # Extract version from tag (e.g., v4.1.7.dev3 -> 4.1.7.dev3)
+      - name: Set VERSION from tag
+        shell: bash
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
+
+      - name: Show VERSION
+        run: echo "VERSION=$VERSION"
+
+      # ───────── TestPyPI path: if the GitHub Release is marked prerelease OR the tag contains ".dev"
+      - name: Publish to TestPyPI
+        if: ${{ github.event.release.prerelease == true || contains(env.VERSION, '.dev') }}
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          packages-dir: dist/
+          # Use a project-scoped token stored as a repository secret
+          password: ${{ secrets.TESTPYPI_API_TOKEN }}
+
+      # ───────── PyPI path: otherwise publish to PyPI via Trusted Publishing (OIDC)
+      - name: Publish to PyPI
+        if: ${{ github.event.release.prerelease == false && !contains(env.VERSION, '.dev') }}
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: dist/
+          # No password when using Trusted Publishing (configure on PyPI project settings)
