@@ -21,13 +21,18 @@ classifiers = [
 # --- Direct runtime dependencies only (what your app imports at run) ---
 dependencies = [
   "flask>=2.3",
-  "psutil>=5.9",
+  "psutil",
   "numpy>=1.26",
-  "pandas>=2.2",
+  "pandas",
   "requests>=2.31",
-  "pillow>=10.0",
-  "pyyaml>=6.0.1",
-  "timesat>=4.1.7",
+  "pillow",
+  "pyyaml",
+  "timesat",
+  "rasterio",
+  "matplotlib",
+  "plotly",
+  "PyQt5",
+  "ray",
 ]
 
 [tool.hatch.version]
