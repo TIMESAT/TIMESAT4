@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, session, request, jsonify, send_fi
 import plotly
 import plotly.graph_objs as go
 import numpy as np
-import ts_functions
+from . import ts_functions
 import pandas as pd
 import json
 import datetime

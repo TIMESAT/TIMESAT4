@@ -5,7 +5,7 @@ import json
 from rasterio.warp import transform_bounds
 import numpy as np
 import matplotlib.cm as cm
-import ts_functions
+from . import ts_functions
 from PIL import Image
 import pandas as pd
 

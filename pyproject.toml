@@ -1,0 +1,44 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "timesat-gui"
+dynamic = ["version"]
+description = "Python-based graphical interface and workflow manager for TIMESAT"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "GPL-3.0-only" }
+authors = [{ name = "TIMESAT Team" }]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+  "Framework :: Flask",
+]
+
+# Put only *runtime* deps here (subset of requirements.txt that the app truly needs).
+# Keep dev/test/docs pins in requirements/*.txt or optional groups.
+dependencies = [
+  "flask>=2.3",         # adjust to what you actually use
+  # "numpy>=1.26",
+  # "pandas>=2.2",
+  # etc.
+]
+
+[project.scripts]
+timesat-gui = "timesat_gui.app:main"   # `timesat-gui` CLI to launch the server
+
+[tool.hatch.build]
+exclude = ["/tests", "/.github"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/timesat_gui"]
+
+# Ensure templates and static are included in the wheel
+[tool.hatch.build.targets.wheel.force-include]
+"src/timesat_gui/templates" = "timesat_gui/templates"
+"src/timesat_gui/static" = "timesat_gui/static"
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]

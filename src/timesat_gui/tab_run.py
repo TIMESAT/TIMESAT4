@@ -1,9 +1,9 @@
 from flask import Flask, Response, Blueprint, session, jsonify
 import threading
 import time
-import ts_functions
-import tab_settings
-import ts_full_run
+from . import ts_functions
+from . import tab_settings
+from . import ts_full_run
 import json
 
 import numpy as np

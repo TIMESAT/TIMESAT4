@@ -1,77 +1,25 @@
-# This workflow will upload a Python Package to PyPI or TestPyPI when a release is created
-
-name: Upload Python Package
-
+name: Publish
 on:
   release:
-    types: [published]
-
-permissions:
-  contents: read
-
+    types: [prereleased, released]
 jobs:
-  release-build:
+  build-and-publish:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
-
-      - name: Build release distributions
-        run: |
-          python -m pip install -U build
-          python -m build
-
-      - name: Upload distributions
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-dists
-          path: dist/
-
-  pypi-publish:
-    runs-on: ubuntu-latest
-    needs: [release-build]
-    permissions:
-      # REQUIRED for PyPI Trusted Publishing
-      id-token: write
-
-    environment:
-      name: pypi
-      # Optionally set a URL for deployment status:
-      # url: https://pypi.org/project/YOURPROJECT/${{ github.event.release.name }}
-
-    steps:
-      - name: Retrieve release distributions
-        uses: actions/download-artifact@v4
-        with:
-          name: release-dists
-          path: dist/
-
-      # Extract version from tag (e.g., v4.1.7.dev3 -> 4.1.7.dev3)
-      - name: Set VERSION from tag
-        shell: bash
-        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
-
-      - name: Show VERSION
-        run: echo "VERSION=$VERSION"
-
-      # ───────── TestPyPI path: if the GitHub Release is marked prerelease OR the tag contains ".dev"
-      - name: Publish to TestPyPI
-        if: ${{ github.event.release.prerelease == true || contains(env.VERSION, '.dev') }}
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
-          packages-dir: dist/
-          # Use a project-scoped token stored as a repository secret
-          password: ${{ secrets.TESTPYPI_API_TOKEN }}
-
-      # ───────── PyPI path: otherwise publish to PyPI via Trusted Publishing (OIDC)
-      - name: Publish to PyPI
-        if: ${{ github.event.release.prerelease == false && !contains(env.VERSION, '.dev') }}
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          packages-dir: dist/
-          # No password when using Trusted Publishing (configure on PyPI project settings)
+        with: { python-version: "3.12" }
+      - run: python -m pip install -U build twine
+      - run: python -m build
+      - name: Upload to TestPyPI on prerelease
+        if: github.event.action == 'prereleased'
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        run: twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+      - name: Upload to PyPI on release
+        if: github.event.action == 'released'
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: twine upload dist/*
