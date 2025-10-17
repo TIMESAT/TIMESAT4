@@ -62,7 +62,7 @@ pip install timesat-gui
 
 ### Option 3 — Direct installation with pip
 
-If you already have Python 3.12+ installed:
+If you already have Python 3.10+ installed:
 
 ```bash
 pip install timesat-gui
