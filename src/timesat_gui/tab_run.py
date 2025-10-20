@@ -33,11 +33,6 @@ def long_running_job(input_type,session_data_json,ym3,wm3,lc3):
 
     progress_updates.append("\n----------------------\nJob started!\n")
 
-    flist = session_data_json['image_file_names']
-
-    tv_yyyymmdd, tv_yyyydoy, nyear, nyearstart, nyearend = ts_functions.read_time_vector_data(flist)
-
-
     array_params = ts_functions.load4array_params()
 
     qlist = session_data_json['qa_file_names']
@@ -70,6 +65,9 @@ def long_running_job(input_type,session_data_json,ym3,wm3,lc3):
 
     if num_core > 1:
         ray.init(_temp_dir=ray_dir, ignore_reinit_error=True, num_cpus=num_core)
+
+    flist = session_data_json['image_file_names']
+    tv_yyyymmdd, tv_yyyydoy, nyear, nyearstart, nyearend = ts_functions.read_time_vector_data(flist)
 
     z = len(flist)
     progress_updates.append(f'num of images: {z}')

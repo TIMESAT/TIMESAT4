@@ -197,7 +197,7 @@ def update_plot():
     x_dates = pd.to_datetime(raw_yyyymmdd.astype(str), format='%Y%m%d')
 
     vpptable = []
-    print(raw_y.shape)
+
     # 使用 Plotly 创建图表
     fig = go.Figure()
     

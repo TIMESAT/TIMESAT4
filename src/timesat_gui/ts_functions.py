@@ -99,7 +99,7 @@ def load4array_params():
     return array_params
 
 def read_time_vector_data(lines):
-
+    print(lines)
     # Check if file exists
     try:
         """
@@ -254,15 +254,15 @@ def read_table_data(df):
     # Get the number of rows
     npt = len(df)
 
-    col = df.shape[1] - 1
+    row = df.shape[1] - 1
 
     # Initialize 3D arrays
-    ym3 = np.zeros((col, 1, npt), dtype=np.float32)
-    wm3 = np.ones((col, 1, npt), dtype=np.float32)
-    lc3 = np.ones((col, 1), dtype=np.float32)
+    ym3 = np.zeros((row, 1, npt), dtype=np.float32)
+    wm3 = np.ones((row, 1, npt), dtype=np.float32)
+    lc3 = np.ones((row, 1), dtype=np.float32)
 
     # Save data from the second column to the end into ym3
-    # Transpose the slice to align with the shape (col, 1, npt)
+    # Transpose the slice to align with the shape (row, 1, npt)
     ym3[:, 0, :] = df.iloc[:, 1:].T.values.astype(np.float32)
 
     # Convert lists to numpy arrays

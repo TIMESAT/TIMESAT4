@@ -116,14 +116,14 @@ def upload_input_file():
         session['ylim1'] = min_y
         session['ylim2'] = max_y
 
-        session['col'] = table_data.shape[1] - 1
-        session['row'] = 1
+        session['col'] = 1
+        session['row'] = table_data.shape[1] - 1
         session['current_col'] = 1
         session['current_row'] = 1
         session['col_start'] = 1
-        session['col_end'] = table_data.shape[1] - 1
+        session['col_end'] = 1
         session['row_start'] = 1
-        session['row_end'] = 1
+        session['row_end'] = table_data.shape[1] - 1
 
     else:
         return "Invalid file format", 400
